@@ -1,6 +1,7 @@
 module.exports = AFRAME.registerComponent('checkpoint', {
   schema: {
-    offset: {default: {x: 0, y: 0, z: 0}, type: 'vec3'}
+    offset: {default: {x: 0, y: 0, z: 0}, type: 'vec3'},
+    tracked: {default: false, type: 'boolean'}
   },
 
   init: function () {

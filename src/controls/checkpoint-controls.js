@@ -2,9 +2,9 @@ const EPS = 0.1;
 
 module.exports = AFRAME.registerComponent('checkpoint-controls', {
   schema: {
-    enabled: {default: true},
-    mode: {default: 'teleport', oneOf: ['teleport', 'animate']},
-    animateSpeed: {default: 3.0}
+    enabled: { default: true },
+    mode: { default: 'teleport', oneOf: ['teleport', 'animate'] },
+    animateSpeed: { default: 3.0 }
   },
 
   init: function () {
@@ -40,12 +40,12 @@ module.exports = AFRAME.registerComponent('checkpoint-controls', {
       return;
     }
 
-    el.emit('navigation-start', {checkpoint: checkpoint});
+    el.emit('navigation-start', { checkpoint: checkpoint });
 
     if (this.data.mode === 'teleport') {
       this.el.setAttribute('position', this.targetPosition);
       this.checkpoint = null;
-      el.emit('navigation-end', {checkpoint: checkpoint});
+      el.emit('navigation-end', { checkpoint: checkpoint });
       el.components['movement-controls'].updateNavLocation();
     }
   },
@@ -65,8 +65,11 @@ module.exports = AFRAME.registerComponent('checkpoint-controls', {
 
     this.sync();
     if (position.distanceTo(targetPosition) < EPS) {
-      this.checkpoint = null;
-      this.el.emit('navigation-end', {checkpoint: checkpoint});
+      // If tracked then don't set it to null
+      if (!this.checkpoint.components.checkpoint.data.tracked) {
+        this.checkpoint = null;
+      }
+      this.el.emit('navigation-end', { checkpoint: checkpoint });
       return offset.set(0, 0, 0);
     }
     offset.setLength(data.animateSpeed);
